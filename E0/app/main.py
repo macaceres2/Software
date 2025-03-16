@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from datetime import datetime
 from .models import Stock
 from .database import save_stock, get_stocks, get_stock_by_symbol
@@ -43,4 +43,4 @@ def get_stock(
     stock = get_stock_by_symbol(symbol, price, quantity, date)
     if stock:
         return stock
-    return {"error": "Stock no encontrado"}
+    raise HTTPException(status_code=404, detail="Stock no encontrado")
