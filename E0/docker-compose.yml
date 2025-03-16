@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000" 
+    environment:
+      - DATABASE_URL=postgresql://macaceres2:hJkpukibu534@db:5432/stock_market
+    depends_on:
+      - db
+    networks:
+      - stock_network
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: macaceres2
+      POSTGRES_PASSWORD: hJkpukibu534
+      POSTGRES_DB: stock_market
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - stock_network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - web
+    networks:
+      - stock_network
+
+  mqtt_client:
+    build: .
+    command: python -m app.mqtt_client
+    environment:
+      - DATABASE_URL=postgresql://fastapi_user:tu_contraseña@db:5432/stock_market
+    depends_on:
+      - db
+    networks:
+      - stock_network
+
+volumes:
+  postgres_data:
+
+networks:
+  stock_network:
+    driver: bridge
