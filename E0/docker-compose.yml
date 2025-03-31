@@ -18,6 +18,21 @@ services:
       - MQTT_TOPIC=stocks/info
     restart: always
 
+  api2:
+  build: .
+  ports:
+    - "8001:8000"
+  environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=macaceres2
+      - DATABASE_PASSWORD=hJkpukibu534
+      - DATABASE_NAME=stock_market
+      - MQTT_BROKER=broker.hivemq.com
+      - MQTT_PORT=1883
+      - MQTT_TOPIC=stocks/info
+  restart: always
+
   mqtt-client:
     build: .
     command: python -m app.mqtt_standalone
