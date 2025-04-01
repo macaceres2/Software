@@ -40,7 +40,7 @@ class MQTTClient:
             return
         
         self.client = mqtt.Client()
-        self.cliente.on_connect = self.on_connect
+        self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
 
         try:

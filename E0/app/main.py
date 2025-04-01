@@ -2,7 +2,7 @@ from fastapi import FastAPI, Query, HTTPException, Depends
 from typing import Optional
 from datetime import datetime
 from .models import Stock, StockResponse, StocksList
-from .database import save_stock, get_all_stocks, get_stocks_by_symbol
+from .database import save_stock, get_stocks, get_stock_by_symbol
 from .mqtt_client import mqtt_client
 import uvicorn
 import threading
@@ -36,7 +36,7 @@ def list_stocks(
     page:int = Query(1, ge=1, description="Número de página"),
     count: int = Query(25, ge=1, le=30, description="Cantidad de elementos por página")
 ):
-    stocks, total = get_all_stocks(price, quantity, date, page, count)
+    stocks, total = get_stocks(price, quantity, date, page, count)
 
     return {
         "items": stocks,
@@ -57,7 +57,7 @@ def get_stock(
     page: int = Query(1, ge=1, description="Número de página"),
     count: int = Query(25, ge=1, le=30, description="Cantidad de elementos por página")
 ):
-    stocks, total = get_stocks_by_symbol(symbol, price, quantity, date, page, count)
+    stocks, total = get_stock_by_symbol(symbol, price, quantity, date, page, count)
     
     if total == 0:
         raise HTTPException(status_code=404, detail=f"No se encontraron stocks para el símbolo {symbol} con los filtros proporcionados")
