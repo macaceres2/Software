@@ -35,6 +35,9 @@ class MQTTClient:
         except Exception as e:
             print(f"Error al procesar el mensaje MQTT: {e}")
 
+    def connect(self):
+        self.connect_mqtt()
+    
     def connect_mqtt(self):
         if self.client is not None:
             return

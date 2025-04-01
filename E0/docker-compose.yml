@@ -19,7 +19,7 @@ services:
     restart: always
 
   mqtt-client:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     depends_on:
@@ -35,22 +35,23 @@ services:
       - MQTT_TOPIC=stocks/info
     command: ["python", "-m", "app.mqtt_standalone"]
     restart: always
+
   db:
     image: postgres:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
+  
       - POSTGRES_USER=macaceres2
       - POSTGRES_PASSWORD=hJkpukibu534
       - POSTGRES_DB=stock_market
     restart: always
-    
+
   nginx:
     image: nginx:latest
     ports:
       - "80:80"
       - "443:443"
-      - "8081:8081"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf.d:/etc/nginx/conf.d
